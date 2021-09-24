@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,20 +52,23 @@ public class EmployeeController {
 	}
 
 	@DeleteMapping("/employees/{id}")
-	public void deleteById(@PathVariable Long id) {
+	public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+
 		repository.deleteById(id);
+
+		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/employees/{id}")
-	Employee replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
+	EntityModel<Employee> replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
 
 		return repository.findById(id).map(employee -> {
 			employee.setName(newEmployee.getName());
 			employee.setRole(newEmployee.getRole());
-			return repository.save(employee);
+			return employeeModelAssembler.toModel(repository.save(employee));
 		}).orElseGet(() -> {
 			newEmployee.setId(id);
-			return repository.save(newEmployee);
+			return employeeModelAssembler.toModel(repository.save(newEmployee));
 		});
 	}
 }
