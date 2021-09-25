@@ -9,14 +9,22 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 import de.dtonal.payroll.model.Order;
+import de.dtonal.payroll.model.Status;
 
 @Component
 public class OrderModelAssembler implements RepresentationModelAssembler<Order, EntityModel<Order>> {
 
 	@Override
 	public EntityModel<Order> toModel(Order entity) {
-		return EntityModel.of(entity, //
+		EntityModel<Order> entityModel = EntityModel.of(entity, //
 				employeeLink(entity.getId()), linkTo(methodOn(OrderController.class).all()).withRel("orders"));
+
+		if (Status.IN_PROGRESS == entity.getStatus()) {
+			entityModel.add(linkTo(methodOn(OrderController.class).cancel(entity.getId())).withRel("Cancel"));
+			entityModel.add(linkTo(methodOn(OrderController.class).complete(entity.getId())).withRel("Complete"));
+		}
+
+		return entityModel;
 
 	}
 
