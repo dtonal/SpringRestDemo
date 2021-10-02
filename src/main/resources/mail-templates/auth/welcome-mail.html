@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+	<style>
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color: #5CDB95;
+			color: #05386B
+		}
+
+		h2 {
+			color: #EDF5E1;
+			align-self: center;
+
+		}
+
+		p {
+			text-align: justify;
+		}
+	</style>
+	<h1 th:text="#{signup.header}">Signup at MYAPP</h1>
+	<h2 th:text="#{signup.welcome(${username})}">Welcome Username!</h2>
+	<p th:text="#{signup.text}">
+		You have successfully registered yourself at myapp.
+		When you are reading this mail,
+		you will be able to login with your credentials.
+	</p>
+	<p th:utext="#{signup.contact(${contactMail})}">
+		If you have any problems using our service,
+		feel free to
+	</p>
+
+</body>
+
+</html>
