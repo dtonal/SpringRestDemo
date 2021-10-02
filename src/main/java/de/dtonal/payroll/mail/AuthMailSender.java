@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import de.dtonal.payroll.model.VerificationToken;
 import de.dtonal.payroll.model.auth.User;
 
 @Component
@@ -23,11 +24,12 @@ public class AuthMailSender {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AuthMailSender.class);
 
-	public void sendWelcomeMessage(User user) {
+	public void sendWelcomeMessage(User user, VerificationToken verifcationToken) {
 		LOG.info("Send Welcome Message to user " + user);
 
 		try {
-			sendHtmlMessage(user.getEmail(), "Welcome to MYAPP", mailContentCreator.createWelcomeMailBody(user));
+			sendHtmlMessage(user.getEmail(), "Welcome to MYAPP",
+					mailContentCreator.createWelcomeMailBody(user, verifcationToken));
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

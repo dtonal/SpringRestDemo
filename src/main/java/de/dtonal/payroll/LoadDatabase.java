@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +25,9 @@ import de.dtonal.payroll.repository.UserRepository;
 public class LoadDatabase {
 
 	private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
+
+	@Value("${spring.mail.username}")
+	private String gmail;
 
 	@Bean
 	CommandLineRunner initDatabase(EmployeeRepository employeeRepository, OrderRepository orderRepository,

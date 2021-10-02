@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import de.dtonal.payroll.model.VerificationToken;
 import de.dtonal.payroll.model.auth.User;
 
 @Component
@@ -19,11 +20,12 @@ public class MailContentCreator {
 	@Autowired
 	private SpringTemplateEngine thymeleafTemplateEngine;
 
-	public String createWelcomeMailBody(User user) {
+	public String createWelcomeMailBody(User user, VerificationToken verifcationToken) {
 		LOG.info("Create welcome mail body for user: " + user);
 		Context thymeleafContext = new Context();
 		thymeleafContext.setVariable("username", user.getUsername());
 		thymeleafContext.setVariable("contactMail", "dtonal@posteo.de");
+		thymeleafContext.setVariable("token", verifcationToken.getToken());
 
 		String htmlBody = thymeleafTemplateEngine.process(WELCOME_MAIL_TEMPLATE, thymeleafContext);
 		LOG.debug("HtmlBody is: " + htmlBody);
