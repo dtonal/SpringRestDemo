@@ -1,4 +1,4 @@
-package de.dtonal.payroll.rest.controller;
+package de.dtonal.payroll.rest.controller.order;
 
 public class OrderNotFoundException extends RuntimeException {
 	OrderNotFoundException(Long id) {

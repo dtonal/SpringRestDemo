@@ -1,4 +1,4 @@
-package de.dtonal.payroll.security;
+package de.dtonal.payroll.security.jwt;
 
 import java.util.Date;
 
@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import de.dtonal.payroll.security.user.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

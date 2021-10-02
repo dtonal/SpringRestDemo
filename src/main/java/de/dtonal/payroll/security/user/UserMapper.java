@@ -1,9 +1,11 @@
-package de.dtonal.payroll.security;
+package de.dtonal.payroll.security.user;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import de.dtonal.payroll.model.auth.User;
 
 public class UserMapper {
 	public static UserPrincipal map(User user) {

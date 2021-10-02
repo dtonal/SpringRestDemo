@@ -1,4 +1,4 @@
-package de.dtonal.payroll.security;
+package de.dtonal.payroll.model.auth;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

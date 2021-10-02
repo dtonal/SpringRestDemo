@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Configuration;
 import de.dtonal.payroll.model.Employee;
 import de.dtonal.payroll.model.Order;
 import de.dtonal.payroll.model.Status;
+import de.dtonal.payroll.model.auth.Role;
+import de.dtonal.payroll.model.auth.RoleName;
+import de.dtonal.payroll.model.auth.User;
 import de.dtonal.payroll.repository.EmployeeRepository;
 import de.dtonal.payroll.repository.OrderRepository;
 import de.dtonal.payroll.repository.RoleRepository;
 import de.dtonal.payroll.repository.UserRepository;
-import de.dtonal.payroll.security.Role;
-import de.dtonal.payroll.security.RoleName;
-import de.dtonal.payroll.security.User;
 
 @Configuration
 public class LoadDatabase {

@@ -1,4 +1,4 @@
-package de.dtonal.payroll.rest.controller;
+package de.dtonal.payroll.rest.controller.order;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

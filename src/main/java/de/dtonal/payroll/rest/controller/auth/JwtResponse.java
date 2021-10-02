@@ -1,4 +1,4 @@
-package de.dtonal.payroll.rest.controller;
+package de.dtonal.payroll.rest.controller.auth;
 
 public class JwtResponse {
 	private String token;

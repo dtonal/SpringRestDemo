@@ -1,4 +1,4 @@
-package de.dtonal.payroll.rest.controller;
+package de.dtonal.payroll.rest.controller.auth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.dtonal.payroll.mail.AuthMailSender;
+import de.dtonal.payroll.model.auth.Role;
+import de.dtonal.payroll.model.auth.User;
 import de.dtonal.payroll.repository.RoleRepository;
 import de.dtonal.payroll.repository.UserRepository;
-import de.dtonal.payroll.security.JwtProvider;
-import de.dtonal.payroll.security.Role;
-import de.dtonal.payroll.security.User;
-import de.dtonal.payroll.security.UserPrincipal;
+import de.dtonal.payroll.rest.controller.MessageResponse;
+import de.dtonal.payroll.security.jwt.JwtProvider;
+import de.dtonal.payroll.security.user.UserPrincipal;
 
 @RestController
 @RequestMapping("/auth")

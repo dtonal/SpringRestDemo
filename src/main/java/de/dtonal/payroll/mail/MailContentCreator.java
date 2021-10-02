@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import de.dtonal.payroll.security.User;
+import de.dtonal.payroll.model.auth.User;
 
 @Component
 public class MailContentCreator {

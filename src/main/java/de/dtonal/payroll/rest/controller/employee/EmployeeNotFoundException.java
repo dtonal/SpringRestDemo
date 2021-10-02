@@ -1,4 +1,4 @@
-package de.dtonal.payroll.rest.controller;
+package de.dtonal.payroll.rest.controller.employee;
 
 public class EmployeeNotFoundException extends RuntimeException {
 	EmployeeNotFoundException(Long id) {

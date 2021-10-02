@@ -1,4 +1,4 @@
-package de.dtonal.payroll.security;
+package de.dtonal.payroll.security.user;
 
 import java.util.Collection;
 

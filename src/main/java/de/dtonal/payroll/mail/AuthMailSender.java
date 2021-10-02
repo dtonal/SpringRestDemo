@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import de.dtonal.payroll.security.User;
+import de.dtonal.payroll.model.auth.User;
 
 @Component
 public class AuthMailSender {
