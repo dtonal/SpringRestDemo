@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.Email;
 
 import com.sun.istack.NotNull;
 
@@ -23,6 +24,9 @@ public class User {
 	private String username;
 	@NotNull
 	private String password;
+	@NotNull
+	@Email
+	private String email;
 	@NotNull
 	private boolean enabled;
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -66,8 +70,16 @@ public class User {
 		this.roles = roles;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", enabled=" + enabled + ", roles=" + roles + "]";
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", roles=" + roles + "]";
 	}
 }

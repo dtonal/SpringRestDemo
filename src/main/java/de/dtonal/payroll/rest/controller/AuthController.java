@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.dtonal.payroll.mail.AuthMailSender;
 import de.dtonal.payroll.repository.RoleRepository;
 import de.dtonal.payroll.repository.UserRepository;
 import de.dtonal.payroll.security.JwtProvider;
@@ -28,15 +29,17 @@ import de.dtonal.payroll.security.UserPrincipal;
 @RequestMapping("/auth")
 public class AuthController {
 	@Autowired
-	AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 	@Autowired
-	JwtProvider tokenProvider;
+	private JwtProvider tokenProvider;
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	@Autowired
-	RoleRepository roleRepository;
+	private RoleRepository roleRepository;
 	@Autowired
-	PasswordEncoder encoder;
+	private PasswordEncoder encoder;
+	@Autowired
+	private AuthMailSender mailSender;
 
 	@PostMapping("/signin")
 	public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginDTO login) {
@@ -57,12 +60,15 @@ public class AuthController {
 		User user = new User();
 		user.setUsername(signUpRequest.getUsername());
 		user.setPassword(encoder.encode(signUpRequest.getPassword()));
+		user.setEmail(signUpRequest.getEmail());
 
 		List<Role> roles = new ArrayList<Role>();
 		roles.add(roleRepository.getById(1L));
 		user.setRoles(roles);
 		user.setEnabled(true);
 		userRepository.save(user);
+
+		mailSender.sendWelcomeMessage(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
