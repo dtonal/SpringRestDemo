@@ -9,6 +9,7 @@ public class UserPrincipal implements UserDetails {
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private String password;
+	private Long userId;
 	private boolean enabled;
 	private Collection<? extends GrantedAuthority> authorities;
 
@@ -61,6 +62,14 @@ public class UserPrincipal implements UserDetails {
 
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

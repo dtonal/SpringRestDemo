@@ -33,8 +33,24 @@ public class LoadDatabase {
 	CommandLineRunner initDatabase(EmployeeRepository employeeRepository, OrderRepository orderRepository,
 			RoleRepository roleRepository, UserRepository userRepository) {
 		return args -> {
-			log.info("Preloading: " + employeeRepository.save(new Employee("dtonal muu", "admin")));
-			log.info("Preloading: " + employeeRepository.save(new Employee("maria maa", "user")));
+			User userA = new User();
+			userA.setEmail("userA@mail.de");
+			userA.setEnabled(true);
+			userA.setPassword("passwordA");
+			userA.setRoles(new ArrayList<>());
+			userA.setUsername("usernameA");
+			userRepository.save(userA);
+
+			User userB = new User();
+			userB.setEmail("userB@mail.de");
+			userB.setEnabled(true);
+			userB.setPassword("passwordB");
+			userB.setRoles(new ArrayList<>());
+			userB.setUsername("usernameB");
+			userRepository.save(userB);
+
+			log.info("Preloading: " + employeeRepository.save(new Employee("dtonal muu", "admin", userA)));
+			log.info("Preloading: " + employeeRepository.save(new Employee("maria maa", "user", userB)));
 			log.info("Preloading: " + orderRepository.save(new Order("Make me a coffee", Status.IN_PROGRESS)));
 			log.info("Preloading: " + orderRepository.save(new Order("Wash my hair", Status.IN_PROGRESS)));
 

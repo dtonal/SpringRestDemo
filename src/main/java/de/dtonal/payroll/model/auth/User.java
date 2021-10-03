@@ -13,15 +13,19 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	@NotNull
 	private String username;
 	@NotNull
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	@NotNull
 	@Email
@@ -33,7 +37,7 @@ public class User {
 			@JoinColumn(name = "role_id") })
 	private List<Role> roles;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 

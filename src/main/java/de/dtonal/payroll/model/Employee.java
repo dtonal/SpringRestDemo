@@ -5,29 +5,39 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import de.dtonal.payroll.model.auth.User;
 
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Employee {
-
 	private @Id @GeneratedValue Long id;
 	private String firstName;
 	private String lastName;
-
 	private String role;
+	@ManyToOne
+	@JoinColumn(name = "owner_id")
+	private User owner;
 
 	Employee() {
 	}
 
-	public Employee(String firstName, String lastName, String role) {
+	public Employee(String firstName, String lastName, String role, User owner) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.role = role;
+		this.owner = owner;
 	}
 
-	public Employee(String name, String role) {
+	public Employee(String name, String role, User user) {
 		setName(name);
 		this.role = role;
+		this.owner = user;
 	}
 
 	public Long getId() {
@@ -75,7 +85,8 @@ public class Employee {
 
 	@Override
 	public String toString() {
-		return "Employee{" + "id=" + this.id + ", name='" + this.getName() + '\'' + ", role='" + this.role + '\'' + '}';
+		return "Employee [firstName=" + firstName + ", id=" + id + ", lastName=" + lastName + ", owner=" + owner
+				+ ", role=" + role + "]";
 	}
 
 	public String getFirstName() {
@@ -92,5 +103,13 @@ public class Employee {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 }

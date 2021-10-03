@@ -96,10 +96,11 @@ public class AuthController {
 		List<Role> roles = new ArrayList<>();
 		roles.add(roleRepository.getById(1L));
 		user.setRoles(roles);
-		user.setEnabled(false);
+		// user.setEnabled(false);
+		user.setEnabled(true);
 		userRepository.save(user);
 
-		eventPublisher.publishEvent(new UserSignedUpEvent(user));
+		// eventPublisher.publishEvent(new UserSignedUpEvent(user));
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 }

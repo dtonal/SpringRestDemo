@@ -4,6 +4,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.dtonal.payroll.model.Employee;
+import de.dtonal.payroll.model.auth.User;
 import de.dtonal.payroll.repository.EmployeeRepository;
+import de.dtonal.payroll.repository.UserRepository;
+import de.dtonal.payroll.security.user.UserPrincipal;
 
 @RestController
 @RequestMapping("/protected/api")
@@ -28,6 +32,8 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeModelAssembler employeeModelAssembler;
+	@Autowired
+	private UserRepository userRepository;
 
 	private final EmployeeRepository repository;
 
@@ -38,8 +44,12 @@ public class EmployeeController {
 
 	@GetMapping("/employees")
 	CollectionModel<EntityModel<Employee>> all() {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<EntityModel<Employee>> employees = repository.findAll().stream().map(employeeModelAssembler::toModel)
+		User callingUser = getCallingUser(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+		List<EntityModel<Employee>> employees = repository.findAll()//
+				.stream()//
+				.filter(employee -> employee.getOwner().equals(callingUser))//
+				.map(employeeModelAssembler::toModel)//
 				.collect(Collectors.toList());
 
 		return CollectionModel.of(employees, linkTo(methodOn(EmployeeController.class).all()).withSelfRel());
@@ -64,14 +74,29 @@ public class EmployeeController {
 
 	@PutMapping("/employees/{id}")
 	EntityModel<Employee> replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id) {
+		User callingUser = getCallingUser(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-		return repository.findById(id).map(employee -> {
-			employee.setName(newEmployee.getName());
-			employee.setRole(newEmployee.getRole());
-			return employeeModelAssembler.toModel(repository.save(employee));
-		}).orElseGet(() -> {
+		Optional<Employee> foundById = repository.findById(id);
+
+		if (foundById.isPresent()) {
+			Employee employee = foundById.get();
+			if (!employee.getOwner().equals(callingUser)) {
+				// TODO handle with exception
+				throw new RuntimeException("wrong");
+			} else {
+				employee.setName(newEmployee.getName());
+				employee.setRole(newEmployee.getRole());
+				return employeeModelAssembler.toModel(repository.save(employee));
+			}
+		} else {
 			newEmployee.setId(id);
+			newEmployee.setOwner(callingUser);
 			return employeeModelAssembler.toModel(repository.save(newEmployee));
-		});
+		}
+	}
+
+	private User getCallingUser(Object principal) {
+		UserPrincipal userPrincipal = (UserPrincipal) principal;
+		return userRepository.getById(userPrincipal.getUserId());
 	}
 }

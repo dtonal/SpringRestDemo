@@ -13,6 +13,7 @@ public class UserMapper {
 		userPrincipal.setEnabled(user.isEnabled());
 		userPrincipal.setPassword(user.getPassword());
 		userPrincipal.setUsername(user.getUsername());
+		userPrincipal.setUserId(user.getId());
 
 		List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).collect(Collectors.toList());
