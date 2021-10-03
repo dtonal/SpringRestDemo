@@ -42,14 +42,6 @@ public class LoadDatabase {
 			log.info("Preloading Roles: " + adminRole);
 			log.info("Preloading Roles: " + roleRepository.save(new Role(RoleName.USER)));
 
-			User user = new User();
-			user.setUsername("dtonal");
-			user.setPassword("$2a$10$kWWOnNOiToOxcIQ7UJ.cB.XFAflYvMS5BPASR1eqqojc6H9ELWUfC");
-			user.setEnabled(true);
-			List<Role> roles = new ArrayList<>();
-			roles.add(adminRole);
-			user.setRoles(roles);
-			log.info("Preloading User: " + userRepository.save(user));
 		};
 	}
 }

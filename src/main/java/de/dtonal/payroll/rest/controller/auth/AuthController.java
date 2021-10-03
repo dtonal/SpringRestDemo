@@ -2,11 +2,11 @@ package de.dtonal.payroll.rest.controller.auth;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,13 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.dtonal.payroll.mail.AuthMailSender;
-import de.dtonal.payroll.model.VerificationToken;
+import de.dtonal.payroll.events.UserSignedUpEvent;
 import de.dtonal.payroll.model.auth.Role;
 import de.dtonal.payroll.model.auth.User;
 import de.dtonal.payroll.repository.RoleRepository;
 import de.dtonal.payroll.repository.UserRepository;
-import de.dtonal.payroll.repository.auth.VerifcationTokenRepository;
 import de.dtonal.payroll.rest.controller.MessageResponse;
 import de.dtonal.payroll.security.jwt.JwtProvider;
 import de.dtonal.payroll.security.user.UserPrincipal;
@@ -43,9 +41,7 @@ public class AuthController {
 	@Autowired
 	private PasswordEncoder encoder;
 	@Autowired
-	private AuthMailSender mailSender;
-	@Autowired
-	private VerifcationTokenRepository verifcationTokenRepository;
+	private ApplicationEventPublisher eventPublisher;
 
 	@PostMapping("/signin")
 	public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginDTO login) {
@@ -74,12 +70,7 @@ public class AuthController {
 		user.setEnabled(false);
 		userRepository.save(user);
 
-		VerificationToken token = VerificationToken.forUser(user);
-		token.setToken(UUID.randomUUID().toString());
-		verifcationTokenRepository.save(token);
-
-		mailSender.sendWelcomeMessage(user, token);
-
+		eventPublisher.publishEvent(new UserSignedUpEvent(user));
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 }
